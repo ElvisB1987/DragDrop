@@ -5,22 +5,10 @@
     const hideButtons = document.querySelectorAll(".hide")
     const showButtons = document.querySelectorAll(".show")
     var textArea = document.getElementById("textArea");
-    var storedList = localStorage.getItem('lists');
-    const lists = [];
-
-    // if (storedList != null) {
-    //     lists = JSON.parse(storedList)
-    // }
-
-    // Object.keys(lists).forEach(key => {
-    //     let list = document.querySelector(`.container#${key}`)
-    //     lists[key].forEach(item => {
-    //         let element = createCard(item.content)
-    //         list.appendChild(element)
-    //     })
-    // })
+    var remobeBtn = document.querySelector(".buttonRemove")
 
 
+    //Adding text area in container and removig text from same
     buttons.forEach((button) => {
 
         button.addEventListener('click', (e) => {
@@ -45,6 +33,7 @@
         })
     })
 
+    // addinng name for draggable Elements
     showButtons.forEach((showbutton) => {
 
         showbutton.addEventListener('click', (e) => {
@@ -60,7 +49,7 @@
 
             if (textArea.value != "") {
                 curentList.append(newElement)
-                dataForLocalStorage();
+                savetoSessionStorage();
             }
             else {
                 alert("Please enter Name")
@@ -74,9 +63,23 @@
         })
     })
 
+    //Removing draggable Ellemnets from trash
+
+    remobeBtn.addEventListener("click", (e) => {
+        e.preventDefault()
+        let newLocal = document.getElementById("container-" + e.target.id)
+        let myNode = newLocal.querySelectorAll(".draggable")
+        myNode.forEach((node) => {
+            node.remove()
+            sessionStorage.clear();
+        })
+
+    })
 
 
+    // drag start and add class list dragging on draggable elements
     document.addEventListener("dragstart", (e) => {
+        e.preventDefault()
         const element = e.target.closest(".draggable");
         if (element) {
             element.classList.add("dragging");
@@ -84,42 +87,16 @@
         }
     });
 
+    //drag end remove dragging class from dragable lements
     document.addEventListener("dragend", (e) => {
+        e.preventDefault()
         const element = e.target.closest(".draggable");
         if (element) {
             element.classList.remove("dragging");
         }
     });
 
-    document.addEventListener("drop", function (event) {
-        event.preventDefault();
-    }, false);
 
-
-    // draggables.forEach((draggable) => {
-    //     draggable.addEventListener("dragstart", () => {
-    //         draggable.classList.add("dragging");
-    //         console.log("drag start");
-    //     });
-
-    //     draggable.addEventListener("dragend", () => {
-    //         draggable.classList.remove("dragging");
-    //     });
-    // });
-
-    // mainContainer.addEventListener("dragover", (e) => {
-    //     e.preventDefault();
-    //     const container = e.target.closest(".container");
-    //     if (container) {
-    //         const afterElement = getDragAffterElement(container, e.clientY);
-    //         const draggable = document.querySelector(".dragging");
-    //         if (afterElement == null) {
-    //             container.appendChild(draggable);
-    //         } else {
-    //             container.insertBefore(draggable, afterElement);
-    //         }
-    //     }
-    // });
 
 
 
@@ -136,22 +113,9 @@
             } else {
                 container.insertBefore(draggable, afterElement);
             }
-            dataForLocalStorage();
+            savetoSessionStorage();
 
         });
-
-
-        // draggables.forEach((draggable) => {
-        //     draggable.addEventListener("dragstart", () => {
-        //         draggable.classList.add("dragging");
-        //         console.log("drag start");
-        //     });
-
-        //     draggable.addEventListener("dragend", () => {
-        //         draggable.classList.remove("dragging");
-        //     });
-        // });
-
     });
 
     function getDragAffterElement(container, y) {
@@ -174,8 +138,11 @@
         ).element;
     }
 
+
+
     const data = [];
-    function dataForLocalStorage() {
+    // function savetoSessionStorage set draggable inner textContent and position off dragable elmenst in session storage
+    function savetoSessionStorage() {
         data.length = 0;
         const all_column = document.querySelectorAll(".container");
 
@@ -189,59 +156,26 @@
             });
             data.push({ index: index, title: title, items: cardItemsContent });
         });
-        localStorage.setItem("data", JSON.stringify(data));
+        sessionStorage.setItem("data", JSON.stringify(data));
     }
 
-    // function updateLocalStorageLists() {
-    //     document.querySelectorAll('.container').forEach(list => {
-    //         let property = list.getAttribute('id')
-    //         lists[property] = [];
-
-    //         list.querySelectorAll('.draggable textarea.text-content').forEach(item => {
-    //             lists[property].push({ content: item.innerText })
-    //         })
-
-    //     })
-
-    //     localStorage.setItem('lists', JSON.stringify(lists))
-    // }
-
-
-    // addSectionButton.addEventListener('click', (e) => {
-    //     e.preventDefault();
-    //     createElements()
-
-
-    // })
-
-    // function createElements() {
-
-    //     const newTabel = document.createElement('div')
-    //     newTabel.classList.add('container')
-    //     newTabel.id = new Date().getTime()
-    //     mainContainer.append(newTabel)
-    //     newTabel.innerHTML = `<button id="Hold" class="buttonAdd btn btn-success">+</button>
-    //     <p class="draggable" draggable="true">3 <i class="fas fa-minus-circle"></i></p>
-    //     <p class="draggable" draggable="true">4 <i class="bi bi-trash"></i></p>`
-    //     addsection(newTabel)
-
-    // }
+    // loading function from session storage
     window.addEventListener("load", function () {
-        const dataFromStorage = localStorage.getItem("data");
-        console.log(dataFromStorage);
+        const dataFromStorage = sessionStorage.getItem("data");
         const parsedData = JSON.parse(dataFromStorage);
         const columns = document.querySelectorAll(".container");
 
-        parsedData.forEach((column, index) => {
-            const currAddACard = columns.item(index).querySelector(".container");
-            column.items.forEach(item => {
-                const itemDiv = document.createElement("p");
-                itemDiv.innerHTML = `<p class="draggable" draggable="true">${item}</p>`;
-                columns.item(index).insertBefore(itemDiv, currAddACard);
+        if (parsedData != null) {
+            parsedData.forEach((column, index) => {
+                const currAddACard = columns.item(index).querySelector(".container");
+                column.items.forEach(item => {
+                    const itemDiv = document.createElement("p");
+                    itemDiv.innerHTML = `<p class="draggable" draggable="true">${item}</p>`;
+                    columns.item(index).insertBefore(itemDiv, currAddACard);
+                })
+
             })
-            // forDeleteCard();
-            // dragNDrop();
-        })
+        }
     })
 
 })();

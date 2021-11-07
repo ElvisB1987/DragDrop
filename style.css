@@ -60,3 +60,15 @@ textarea{
 h1{
   color: rgba(49, 170, 170, 0.561);
 }
+
+#trash{
+  color: red;
+}
+
+#container-Remove{
+  background-color: hsla(0, 100%, 50%, 0.329);
+}
+
+#container-Remove:active{
+  transform: scale(1.2);
+}
