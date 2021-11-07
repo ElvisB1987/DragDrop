@@ -79,7 +79,6 @@
 
     // drag start and add class list dragging on draggable elements
     document.addEventListener("dragstart", (e) => {
-        e.preventDefault()
         const element = e.target.closest(".draggable");
         if (element) {
             element.classList.add("dragging");
@@ -89,7 +88,6 @@
 
     //drag end remove dragging class from dragable lements
     document.addEventListener("dragend", (e) => {
-        e.preventDefault()
         const element = e.target.closest(".draggable");
         if (element) {
             element.classList.remove("dragging");
@@ -103,7 +101,6 @@
 
     containers.forEach((container) => {
         container.addEventListener("dragover", (e) => {
-            e.preventDefault();
 
             const afterElement = getDragAffterElement(container, e.clientY);
             const draggable = document.querySelector(".dragging")
