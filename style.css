@@ -1,0 +1,62 @@
+body {
+  margin: 0;
+  background: url("./wallpaper.png") no-repeat;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+}
+
+.mainContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.container {
+  display: flex;
+  background-color: rgba(51, 51, 51, 0.39);
+  padding: 1rem;
+  margin-top: 1rem;
+  flex-direction: column;
+  width: 200px;
+  align-self: baseline;
+  border-radius: 15px;
+}
+
+.draggable {
+  display: flex;
+  padding: 1rem;
+  background-color: aquamarine;
+  border: 1px solid black;
+  justify-content: space-between;
+}
+
+.draggable.dragging {
+  opacity: 0.5;
+  cursor: move;
+}
+
+textarea{
+  height: 50px;
+}
+#textarea-toDo, #textarea-Hold,#textarea-Progress,#textarea-Complete{
+  display: flex;
+  flex-wrap: wrap;
+  display: none;
+}
+
+.icon_holder{
+  display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+    width: 100%;
+}
+
+.btn{
+  margin-bottom: 10px;
+}
+
+h1{
+  color: rgba(49, 170, 170, 0.561);
+}
