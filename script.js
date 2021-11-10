@@ -71,7 +71,7 @@
         let myNode = newLocal.querySelectorAll(".draggable")
         myNode.forEach((node) => {
             node.remove()
-            sessionStorage.clear();
+            savetoSessionStorage();
         })
 
     })

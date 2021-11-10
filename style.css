@@ -3,7 +3,6 @@ body {
   background: url("./wallpaper.png") no-repeat;
   background-size: cover;
   width: 100vw;
-  height: 100vh;
 }
 
 .mainContainer {
